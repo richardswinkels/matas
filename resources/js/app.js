@@ -1,8 +1,10 @@
 import './bootstrap';
 
-import { createApp } from 'vue'
-import TestComponent from './components/test-component.vue'
+import { createApp } from 'vue';
+import App from './layouts/App.vue';
 
-createApp({})
-    .component('TestComponent', TestComponent)
-    .mount('#app')
+import router from './routes/index';
+
+createApp(App)
+    .use(router)
+    .mount('#app');
