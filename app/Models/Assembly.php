@@ -18,6 +18,7 @@ class Assembly extends Model
     protected $fillable = [
         'name',
         'image',
+        'thumbnail',
         'price',
     ];
 

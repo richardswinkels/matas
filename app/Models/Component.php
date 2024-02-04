@@ -21,6 +21,7 @@ class Component extends Model
         'manufacturer_id',
         'type',
         'image',
+        'thumbnail',
         'price',
     ];
 
