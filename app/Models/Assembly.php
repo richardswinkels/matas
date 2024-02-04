@@ -30,6 +30,16 @@ class Assembly extends Model
         'price' => 'float',
     ];
 
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['search'] ?? false, function ($query, $search) {
+            $query
+                ->where('id', 'like', '%' . $search . '%')
+                ->orWhere('name', 'like', '%' . $search . '%')
+                ->orWhere('price', 'like', '%' . $search . '%');
+        });
+    }
+
     public function components(): BelongsToMany
     {
         return $this->belongsToMany(Component::class, 'assembly_components');

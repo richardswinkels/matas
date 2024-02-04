@@ -33,6 +33,20 @@ class Component extends Model
         'price' => 'float',
     ];
 
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['search'] ?? false, function ($query, $search) {
+            $query
+                ->where('id', 'like', '%' . $search . '%')
+                ->orWhere('name', 'like', '%' . $search . '%')
+                ->orWhere('type', 'like', '%' . $search . '%')
+                ->orWhere('price', 'like', '%' . $search . '%')
+                ->orWhereHas('manufacturer', function ($query) use ($search) {
+                    $query->where('name', 'like', '%' . $search . '%');
+                });;
+        });
+    }
+
     public function assemblies(): BelongsToMany
     {
         return $this->belongsToMany(Assembly::class, 'assembly_components');
