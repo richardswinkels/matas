@@ -17,7 +17,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('manufacturers', ManufacturerController::class)->only('index');
+Route::get('manufacturers/options', [ManufacturerController::class, 'getOptions'])->name('manufacturers.options');
+Route::get('components/options', [ComponentController::class, 'getOptions'])->name('components.options');
+
 Route::apiResource('components', ComponentController::class);
 Route::apiResource('assemblies', AssemblyController::class);
 

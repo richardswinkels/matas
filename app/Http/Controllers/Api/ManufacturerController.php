@@ -9,9 +9,9 @@ use App\Models\Manufacturer;
 class ManufacturerController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Return select options array.
      */
-    public function index()
+    public function getOptions()
     {
         $manufacturers = Manufacturer::all();
 

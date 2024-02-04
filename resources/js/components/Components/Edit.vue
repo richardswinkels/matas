@@ -100,7 +100,7 @@ export default {
                 .catch(error => console.log(error))
         },
         async fetchManufacturers() {
-            let url = '/api/manufacturers';
+            let url = '/api/manufacturers/options';
 
             axios.get(url)
                 .then(response => this.manufacturers = response.data.data)

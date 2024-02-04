@@ -90,6 +90,13 @@ export default {
         this.fetchManufacturers()
     },
     methods: {
+        async fetchManufacturers() {
+            let url = '/api/manufacturers/options';
+
+            axios.get(url)
+                .then(response => this.manufacturers = response.data.data)
+                .catch(error => console.log(error));
+        },
         async storeComponent(component) {
             if (this.isLoading) return;
 
@@ -113,13 +120,6 @@ export default {
                         this.isLoading = false;
                     }
                 });
-        },
-        async fetchManufacturers() {
-            let url = '/api/manufacturers';
-
-            axios.get(url)
-                .then(response => this.manufacturers = response.data.data)
-                .catch(error => console.log(error));
         },
     },
 }

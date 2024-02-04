@@ -109,4 +109,14 @@ class ComponentController extends Controller
 
         return response()->json(['message' => 'Component deleted successfully'], 200);
     }
+
+    /**
+     * Return select options array.
+     */
+    public function getOptions()
+    {
+        $components = Component::select('id', 'name')->get();
+
+        return response()->json(['data' => $components]);
+    }
 }
