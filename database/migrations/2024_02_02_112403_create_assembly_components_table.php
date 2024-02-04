@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('assembly_id')->constrained()->cascadeOnDelete();
             $table->foreignId('component_id')->constrained()->cascadeOnDelete();
-            $table->string('location', 10);
+            $table->string('location', 10)->nullable();
 
             $table->unique([
                 'component_id',

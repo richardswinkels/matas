@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.multiselect__content-wrapper {
+    @apply relative !important;
+}
+
+.multiselect--above,  .multiselect__tags {
+    @apply border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm !important;
+}
+
+.multiselect__tag, .multiselect__option--highlight, .multiselect__option--highlight::after, .multiselect__option--select {
+    @apply bg-indigo-500 !important;
+}
+
+.multiselect__tag-icon::after {
+    @apply text-white !important;
+}

@@ -58,3 +58,7 @@ const route = useRoute()
 
 const currentPageTitle = computed(() => route.meta.title)
 </script>
+
+<style>
+@import 'vue-multiselect/dist/vue-multiselect.css';
+</style>

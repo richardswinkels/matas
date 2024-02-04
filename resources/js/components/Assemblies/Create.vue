@@ -23,6 +23,19 @@
             </div>
         </div>
         <div class="mt-4">
+            <label for="components" class="block text-sm font-semibold mb-1">
+                Components:
+            </label>
+            <Multiselect
+                v-model="this.assembly.components"
+                :custom-label="({ id, name }) => `#${id} - ${name}`"
+                :options="components"
+                :multiple="true"
+                placeholder="Select components"
+                track-by="id"
+            />
+        </div>
+        <div class="mt-4">
             <label for="image" class="block text-sm font-semibold mb-1">
                 Image:
             </label>
@@ -44,25 +57,44 @@
 </template>
 
 <script>
+import Multiselect from 'vue-multiselect';
+
 export default {
+    components: {
+        Multiselect,
+    },
     data() {
         return {
             assembly: {
                 'name': '',
                 'price': '',
                 'image': '',
+                'components': [],
+                'component_ids': [],
             },
-            manufacturers: [],
+            components: [],
             validationErrors: [],
             isLoading: false,
         }
     },
+    mounted() {
+      this.fetchComponents();
+    },
     methods: {
+        async fetchComponents() {
+            let url = '/api/components/options';
+
+            axios.get(url)
+                .then(response => this.components = response.data.data)
+                .catch(error => console.log(error));
+        },
         async storeAssembly(assembly) {
             if (this.isLoading) return;
 
             this.isLoading = true
             this.validationErrors = {}
+
+            assembly['component_ids'] = this.assembly.components.map(component => component.id);
 
             const serializedAssembly = new FormData()
             for (const key in this.assembly) {
