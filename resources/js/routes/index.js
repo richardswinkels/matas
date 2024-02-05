@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import {createRouter, createWebHistory} from 'vue-router';
 
 import Auth from '@/layouts/Auth.vue';
 import App from '@/layouts/App.vue';
@@ -14,10 +14,28 @@ import AssembliesShow from '@/components/Assemblies/Show.vue';
 import AssembliesCreate from '@/components/Assemblies/Create.vue';
 import AssembliesEdit from '@/components/Assemblies/Edit.vue';
 
+function guest(to, from, next) {
+    if (localStorage.getItem('loggedIn') !== 'true') {
+        next()
+    } else {
+        next({name: 'home'});
+    }
+}
+
+function admin(to, from, next) {
+    if (localStorage.getItem('is_admin') === 'true') {
+        next({name: 'home'});
+    } else {
+        next();
+    }
+}
+
+
 const routes = [
     {
         path: '',
-        redirect: 'components'
+        name: 'home',
+        redirect: 'components',
     },
     {
         component: Auth,
@@ -26,11 +44,13 @@ const routes = [
                 path: '/login',
                 name: 'login',
                 component: Login,
+                beforeEnter: guest,
             },
             {
                 path: '/register',
                 name: 'register',
                 component: Register,
+                beforeEnter: guest,
             }
         ]
     },
@@ -57,6 +77,7 @@ const routes = [
                 path: '/components/create',
                 name: 'components.create',
                 component: ComponentsCreate,
+                beforeEnter: admin,
                 meta: {
                     title: 'Create new component',
                 },
@@ -65,6 +86,7 @@ const routes = [
                 path: '/components/:id/edit',
                 name: 'components.edit',
                 component: ComponentsEdit,
+                beforeEnter: admin,
                 meta: {
                     title: 'Edit existing component',
                 },
@@ -89,6 +111,7 @@ const routes = [
                 path: '/assemblies/create',
                 name: 'assemblies.create',
                 component: AssembliesCreate,
+                beforeEnter: admin,
                 meta: {
                     title: 'Create new assembly',
                 },
@@ -97,6 +120,7 @@ const routes = [
                 path: '/assemblies/:id/edit',
                 name: 'assemblies.edit',
                 component: AssembliesEdit,
+                beforeEnter: admin,
                 meta: {
                     title: 'Edit existing assembly',
                 },

@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
     ];
 
     /**
@@ -47,5 +48,10 @@ class User extends Authenticatable
     public function assemblies(): BelongsToMany
     {
         return $this->belongsToMany(Assembly::class, 'user_assemblies');
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->is_admin;
     }
 }

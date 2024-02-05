@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\Api\AssemblyController;
+use App\Http\Controllers\Api\Auth\LoginController;
+use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\ComponentController;
 use App\Http\Controllers\Api\ManufacturerController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\User\UserAssemblyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,12 +19,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('manufacturers/options', [ManufacturerController::class, 'getOptions'])->name('manufacturers.options');
-Route::get('components/options', [ComponentController::class, 'getOptions'])->name('components.options');
+Route::apiResource('components', ComponentController::class)->only('index', 'show');
+Route::apiResource('assemblies', AssemblyController::class)->only('index', 'show');
 
-Route::apiResource('components', ComponentController::class);
-Route::apiResource('assemblies', AssemblyController::class);
+Route::group(['middleware' => ['guest']], function () {
+    Route::post('/login', [LoginController::class, 'store'])->name('login');
+    Route::post('/register', [RegisterController::class, 'store'])->name('register');
+});
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::post('user/assembly/{assembly}', [UserAssemblyController::class, 'store'])->name('user.assembly.store');
+    Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+});
+
+Route::group(['middleware' => ['auth.admin']], function () {
+    Route::get('manufacturers/options', [ManufacturerController::class, 'getOptions'])->name('manufacturers.options');
+    Route::get('components/options', [ComponentController::class, 'getOptions'])->name('components.options');
+
+    Route::apiResource('components', ComponentController::class)->only('store', 'update');
+    Route::apiResource('assemblies', AssemblyController::class)->only('store', 'update');
 });
