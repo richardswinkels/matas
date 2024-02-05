@@ -36,9 +36,9 @@
             </div>
             <div class="flex self-center">
                 <div>
-                    @auth
-                        <a href="{{ route('login') }}"
-                    @endauth
+                    @guest
+                        <a href="{{ route('login') }}" class="underline text-sm">Login</a>
+                    @endguest
                 </div>
             </div>
         </div>
