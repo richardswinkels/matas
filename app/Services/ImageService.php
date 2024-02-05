@@ -13,7 +13,7 @@ class ImageService
     public function storeImage($image, $width, $height, $subfolder = null)
     {
         $image = Image::read($image)->resize($width, $height)->toJpeg();
-        $imagePath = "images/" . ($subfolder ? "$subfolder/" : '') . uniqid() . '.jpg';
+        $imagePath = 'images/'.($subfolder ? "$subfolder/" : '').uniqid().'.jpg';
         Storage::disk('public')->put($imagePath, $image);
 
         return $imagePath;
@@ -25,7 +25,7 @@ class ImageService
     public function storeThumbnail($image, $width, $height, $subfolder = null)
     {
         $thumbnail = Image::read($image)->resize($width, $height)->toJpeg();
-        $thumbnailPath = "thumbnails/" . ($subfolder ? "$subfolder/" : '') . uniqid() . '.jpg';
+        $thumbnailPath = 'thumbnails/'.($subfolder ? "$subfolder/" : '').uniqid().'.jpg';
         Storage::disk('public')->put($thumbnailPath, $thumbnail);
 
         return $thumbnailPath;

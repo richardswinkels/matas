@@ -1,7 +1,8 @@
 <template>
     <div>
         <div class="mb-4">
-            <img :src="this.component.image ? `/storage/${this.component.image}` : '/images/no-image.svg'" :alt="this.component.name" class="h-[400px] w-[400px]" />
+            <img :src="this.component.image ? `/storage/${this.component.image}` : '/images/no-image.svg'"
+                 :alt="this.component.name" class="h-[400px] w-[400px]"/>
         </div>
         <div class="mb-4">
             <label class="font-bold">
@@ -54,7 +55,7 @@ export default {
         }
     },
     mounted() {
-        const componentId =  this.$route.params.id;
+        const componentId = this.$route.params.id;
         this.fetchComponent(componentId);
     },
     methods: {

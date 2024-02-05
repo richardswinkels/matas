@@ -38,13 +38,13 @@ class Component extends Model
     {
         $query->when($filters['search'] ?? false, function ($query, $search) {
             $query
-                ->where('id', 'like', '%' . $search . '%')
-                ->orWhere('name', 'like', '%' . $search . '%')
-                ->orWhere('type', 'like', '%' . $search . '%')
-                ->orWhere('price', 'like', '%' . $search . '%')
+                ->where('id', 'like', '%'.$search.'%')
+                ->orWhere('name', 'like', '%'.$search.'%')
+                ->orWhere('type', 'like', '%'.$search.'%')
+                ->orWhere('price', 'like', '%'.$search.'%')
                 ->orWhereHas('manufacturer', function ($query) use ($search) {
-                    $query->where('name', 'like', '%' . $search . '%');
-                });;
+                    $query->where('name', 'like', '%'.$search.'%');
+                });
         });
     }
 
@@ -53,7 +53,8 @@ class Component extends Model
         return $this->belongsToMany(Assembly::class, 'assembly_components');
     }
 
-    public function manufacturer(): BelongsTo {
+    public function manufacturer(): BelongsTo
+    {
         return $this->belongsTo(Manufacturer::class);
     }
 }

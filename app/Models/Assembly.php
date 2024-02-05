@@ -35,9 +35,9 @@ class Assembly extends Model
     {
         $query->when($filters['search'] ?? false, function ($query, $search) {
             $query
-                ->where('id', 'like', '%' . $search . '%')
-                ->orWhere('name', 'like', '%' . $search . '%')
-                ->orWhere('price', 'like', '%' . $search . '%');
+                ->where('id', 'like', '%'.$search.'%')
+                ->orWhere('name', 'like', '%'.$search.'%')
+                ->orWhere('price', 'like', '%'.$search.'%');
         });
     }
 

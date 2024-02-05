@@ -22,7 +22,7 @@ class ComponentResource extends JsonResource
             'image' => $this->image,
             'thumbnail' => $this->thumbnail,
             'manufacturer' => $this->manufacturer->name,
-            'manufacturer_id'  => $this->manufacturer->id,
+            'manufacturer_id' => $this->manufacturer->id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

@@ -75,7 +75,7 @@ class ComponentController extends Controller
             'type' => 'required|string',
             'price' => 'required|numeric|min:0',
             'manufacturer_id' => 'required|exists:manufacturers,id',
-            'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         if ($request->hasFile('file')) {
