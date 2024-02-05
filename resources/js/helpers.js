@@ -7,19 +7,3 @@ export const formatEuro = {
         }
     }
 };
-
-export const isAdmin = {
-    computed: {
-        isAdmin() {
-            return localStorage.getItem('isAdmin') === 'true';
-        }
-    }
-};
-
-export const isLoggedIn = {
-    computed: {
-        isLoggedIn() {
-            return localStorage.getItem('loggedIn') === 'true';
-        }
-    }
-};

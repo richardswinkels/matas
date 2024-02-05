@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>Matas</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -14,7 +14,9 @@
 </head>
 <body class="antialiased">
 <div class="min-h-screen bg-gray-100" id="app">
-    <router-view></router-view>
+    <main>
+        @yield('content')
+    </main>
 </div>
 </body>
 </html>

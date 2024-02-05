@@ -5,7 +5,6 @@ use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\ComponentController;
 use App\Http\Controllers\Api\ManufacturerController;
-use App\Http\Controllers\Api\User\UserAssemblyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,7 +27,6 @@ Route::group(['middleware' => ['guest']], function () {
 });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('user/assembly/{assembly}', [UserAssemblyController::class, 'store'])->name('user.assembly.store');
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 });
 

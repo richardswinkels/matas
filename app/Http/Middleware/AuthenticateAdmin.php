@@ -19,6 +19,10 @@ class AuthenticateAdmin
             return $next($request);
         }
 
-        return response()->json(['error' => 'Unauthorized.'], 401);
+        if ($request->expectsJson()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        abort(401);
     }
 }

@@ -1,15 +1,12 @@
 import './bootstrap';
 
 import {createApp} from 'vue';
-import {isAdmin} from "./mixins";
-import {formatEuro} from './mixins';
-import {isLoggedIn} from "./mixins";
+import {isAdmin} from "./helpers.js";
+import {formatEuro} from './helpers.js';
+import {isLoggedIn} from "./helpers.js";
 
 import router from './routes/index';
 
 createApp({})
-    .mixin(formatEuro)
-    .mixin(isAdmin)
-    .mixin(isLoggedIn)
-    .use(router)
+    .use(registerViews)
     .mount('#app');
