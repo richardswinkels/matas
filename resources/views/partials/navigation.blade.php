@@ -41,9 +41,8 @@
                 @auth
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        @method('DELETE')
                         <button type="submit" class="underline text-sm">
-                            Uitloggen
+                            Log out
                         </button>
                     </form>
                 @endauth

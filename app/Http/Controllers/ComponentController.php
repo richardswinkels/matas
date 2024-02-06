@@ -37,6 +37,6 @@ class ComponentController extends Controller
      */
     public function edit(Component $component)
     {
-        return view('components.show', ['component' => $component]);
+        return view('components.edit', ['component' => $component]);
     }
 }
