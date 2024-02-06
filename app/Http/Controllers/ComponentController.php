@@ -29,6 +29,8 @@ class ComponentController extends Controller
      */
     public function show(Component $component)
     {
+        $component->load('manufacturer');
+
         return view('components.show', ['component' => $component]);
     }
 

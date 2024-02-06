@@ -28,6 +28,8 @@ class AssemblyController extends Controller
      */
     public function show(Assembly $assembly)
     {
+        $assembly->load('components');
+
         return view('assemblies.show', ['assembly' => $assembly]);
     }
 
