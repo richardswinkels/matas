@@ -18,22 +18,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('components', ComponentController::class)->only('index', 'show');
-Route::apiResource('assemblies', AssemblyController::class)->only('index', 'show');
-
-Route::group(['middleware' => ['guest']], function () {
-    Route::post('/login', [LoginController::class, 'store'])->name('login');
-    Route::post('/register', [RegisterController::class, 'store'])->name('register');
-});
-
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
-});
+Route::apiResource('components', ComponentController::class)->only('index');
+Route::apiResource('assemblies', AssemblyController::class)->only('index');
 
 Route::group(['middleware' => ['auth.admin']], function () {
-    Route::get('manufacturers/options', [ManufacturerController::class, 'getOptions'])->name('manufacturers.options');
-    Route::get('components/options', [ComponentController::class, 'getOptions'])->name('components.options');
-
     Route::apiResource('components', ComponentController::class)->only('store', 'update');
     Route::apiResource('assemblies', AssemblyController::class)->only('store', 'update');
 });

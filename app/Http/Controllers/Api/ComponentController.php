@@ -58,14 +58,6 @@ class ComponentController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Component $component)
-    {
-        return new ComponentResource($component);
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Component $component)
@@ -108,15 +100,5 @@ class ComponentController extends Controller
         $component->delete();
 
         return response()->json(['message' => 'Component deleted successfully'], 200);
-    }
-
-    /**
-     * Return select options array.
-     */
-    public function getOptions()
-    {
-        $components = Component::select('id', 'name')->get();
-
-        return response()->json(['data' => $components]);
     }
 }

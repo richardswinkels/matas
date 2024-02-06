@@ -59,16 +59,6 @@ class AssemblyController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Assembly $assembly)
-    {
-        $assembly->load('components');
-
-        return new AssemblyResource($assembly);
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Assembly $assembly)

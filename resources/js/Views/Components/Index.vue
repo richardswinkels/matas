@@ -60,7 +60,7 @@
                         {{ component.type }}
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        {{ component.manufacturer }}
+                        {{ component.manufacturer?.name }}
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                         {{ formatEuro(component.price) }}
