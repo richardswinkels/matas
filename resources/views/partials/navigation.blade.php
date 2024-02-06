@@ -25,7 +25,7 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <a href="{{ route('components.index') }}"
-                                 class="active:border-b-2 active:border-indigo-400 inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
+                       class="active:border-b-2 active:border-indigo-400 inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
                         Components
                     </a>
                     <a href="{{ route('assemblies.index') }}"
@@ -35,11 +35,18 @@
                 </div>
             </div>
             <div class="flex self-center">
-                <div>
-                    @guest
-                        <a href="{{ route('login') }}" class="underline text-sm">Login</a>
-                    @endguest
-                </div>
+                @guest
+                    <a href="{{ route('login') }}" class="underline text-sm">Login</a>
+                @endguest
+                @auth
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="underline text-sm">
+                            Uitloggen
+                        </button>
+                    </form>
+                @endauth
             </div>
         </div>
     </div>
