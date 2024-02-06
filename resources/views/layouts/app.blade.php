@@ -38,5 +38,6 @@
         </div>
     </main>
 </div>
+@routes
 </body>
 </html>

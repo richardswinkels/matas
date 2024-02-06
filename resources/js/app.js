@@ -1,12 +1,11 @@
 import './bootstrap';
+import registerViews from './Views/index.js';
+
+import { ZiggyVue } from 'ziggy-js';
 
 import {createApp} from 'vue';
-import {isAdmin} from "./helpers.js";
-import {formatEuro} from './helpers.js';
-import {isLoggedIn} from "./helpers.js";
-
-import router from './routes/index';
 
 createApp({})
     .use(registerViews)
+    .use(ZiggyVue)
     .mount('#app');
