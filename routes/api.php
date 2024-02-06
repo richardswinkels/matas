@@ -22,6 +22,8 @@ Route::apiResource('components', ComponentController::class)->only('index');
 Route::apiResource('assemblies', AssemblyController::class)->only('index');
 
 Route::group(['middleware' => ['auth.admin']], function () {
+    Route::get('manufacturers', [ManufacturerController::class, 'index'])->name('manufacturers.index');
+
     Route::apiResource('components', ComponentController::class)->only('store', 'update');
     Route::apiResource('assemblies', AssemblyController::class)->only('store', 'update');
 });

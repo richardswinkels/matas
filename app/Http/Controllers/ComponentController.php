@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ManufacturerResource;
 use App\Models\Component;
+use App\Models\Manufacturer;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -21,7 +23,9 @@ class ComponentController extends Controller
      */
     public function create()
     {
-        return view('components.create');
+        $manufacturers = ManufacturerResource::collection(Manufacturer::all());
+
+        return view('components.create', ['manufacturers' => $manufacturers]);
     }
 
     /**
@@ -39,6 +43,8 @@ class ComponentController extends Controller
      */
     public function edit(Component $component)
     {
+        $component->load('manufacturer');
+
         return view('components.edit', ['component' => $component]);
     }
 }

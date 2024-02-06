@@ -3,5 +3,5 @@
 @section('title', 'Edit component')
 
 @section('content')
-    <components.edit></components.edit>
+    <components.edit :component='@json($component)'></components.edit>
 @endsection

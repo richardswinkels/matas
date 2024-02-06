@@ -52,9 +52,6 @@ class AssemblyController extends Controller
 
         $assembly = Assembly::create($validatedData);
 
-        $componentIds = explode(',', $request->input('component_ids'));
-        $assembly->components()->sync($componentIds);
-
         return response()->json(['message' => 'Assembly created successfully'], 201);
     }
 
@@ -87,9 +84,6 @@ class AssemblyController extends Controller
         }
 
         $assembly->update($validatedData);
-
-        $componentIds = explode(',', $request->input('component_ids'));
-        $assembly->components()->sync($componentIds);
 
         return response()->json(['message' => 'Assembly updated successfully'], 201);
     }

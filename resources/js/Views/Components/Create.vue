@@ -1,13 +1,13 @@
 <template>
-    <form @submit.prevent="storeComponent(this.component)">
+    <form @submit.prevent="storeComponent(component)">
         <div>
             <label for="name" class="block text-sm font-semibold mb-1">
                 Name:
             </label>
-            <input v-model="this.component.name" id="name" type="text"
+            <input v-model="component.name" id="name" type="text"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in this.validationErrors?.name">
+                <div v-for="message in validationErrors?.name">
                     {{ message }}
                 </div>
             </div>
@@ -16,7 +16,7 @@
             <label for="manufacturer" class="block text-sm font-semibold mb-1">
                 Manufacturer:
             </label>
-            <select v-model="this.component.manufacturer_id" id="manufacturer"
+            <select v-model="component.manufacturer_id" id="manufacturer"
                     class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
                 <option value="" selected>Choose manufacturer</option>
                 <option v-for="manufacturer in manufacturers" :value="manufacturer.id">
@@ -24,7 +24,7 @@
                 </option>
             </select>
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in this.validationErrors?.manufacturer_id">
+                <div v-for="message in validationErrors?.manufacturer_id">
                     {{ message }}
                 </div>
             </div>
@@ -36,7 +36,7 @@
             <input v-model="this.component.type" id="type" type="text"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in this.validationErrors?.type">
+                <div v-for="message in validationErrors?.type">
                     {{ message }}
                 </div>
             </div>
@@ -48,7 +48,7 @@
             <input v-model="this.component.price" id="price" type="number" min="0" step="0.01"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in this.validationErrors?.price">
+                <div v-for="message in validationErrors?.price">
                     {{ message }}
                 </div>
             </div>
@@ -59,7 +59,7 @@
             </label>
             <input @change="component.file = $event.target.files[0]" type="file" id="image"/>
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in this.validationErrors?.file">
+                <div v-for="message in validationErrors?.file">
                     {{ message }}
                 </div>
             </div>
@@ -97,7 +97,7 @@ export default {
     },
     methods: {
         async fetchManufacturers() {
-            let url = '/api/manufacturers/options';
+            let url = '/api/manufacturers';
 
             axios.get(url)
                 .then(response => this.manufacturers = response.data.data)
@@ -110,15 +110,15 @@ export default {
             this.validationErrors = {}
 
             const serializedComponent = new FormData()
-            for (const key in this.component) {
-                if (this.component.hasOwnProperty(key)) {
-                    serializedComponent.append(key, this.component[key])
+            for (const key in component) {
+                if (component.hasOwnProperty(key)) {
+                    serializedComponent.append(key, component[key])
                 }
             }
 
             axios.post('/api/components', serializedComponent)
                 .then(response => {
-                    this.$router.push({name: 'components.index'});
+                    window.location.href = route('assemblies.index');
                 })
                 .catch(error => {
                     if (error.response?.data) {

@@ -1,13 +1,13 @@
 <template>
-    <form @submit.prevent="updateAssembly(this.assembly)">
+    <form @submit.prevent="updateAssembly(assemblyData)">
         <div>
             <label for="name" class="block text-sm font-semibold mb-1">
                 Name:
             </label>
-            <input v-model="this.assembly.name" id="name" type="text"
+            <input v-model="assemblyData.name" id="name" type="text"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in this.validationErrors?.name">
+                <div v-for="message in validationErrors?.name">
                     {{ message }}
                 </div>
             </div>
@@ -16,34 +16,21 @@
             <label for="price" class="block text-sm font-semibold mb-1">
                 Price:
             </label>
-            <input v-model="this.assembly.price" id="price" type="number" min="0" step="0.01"
+            <input v-model="assemblyData.price" id="price" type="number" min="0" step="0.01"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in this.validationErrors?.price">
+                <div v-for="message in validationErrors?.price">
                     {{ message }}
                 </div>
             </div>
         </div>
         <div class="mt-4">
-            <label for="components" class="block text-sm font-semibold mb-1">
-                Components:
-            </label>
-            <Multiselect
-                v-model="this.assembly.components"
-                :custom-label="({ id, name }) => `#${id} - ${name}`"
-                :options="components"
-                :multiple="true"
-                placeholder="Select components"
-                track-by="id"
-            />
-        </div>
-        <div class="mt-4">
             <label for="image" class="block text-sm font-semibold mb-1">
                 Image:
             </label>
-            <input @change="assembly.file = $event.target.files[0]" type="file" id="image"/>
+            <input @change="assemblyData.file = $event.target.files[0]" type="file" id="image"/>
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in this.validationErrors?.file">
+                <div v-for="message in validationErrors?.file">
                     {{ message }}
                 </div>
             </div>
@@ -61,58 +48,33 @@
 </template>
 
 <script>
-import Multiselect from 'vue-multiselect';
-
 export default {
-    components: {
-        Multiselect,
+    props: {
+        assembly: {
+            type: Object,
+            required: true,
+        }
     },
     data() {
         return {
-            assembly: {
-                'name': '',
-                'price': '',
-                'file': '',
-                'components': [],
-                'component_ids': [],
+            assemblyData: {
+                ...this.assembly
             },
-            components: [],
             validationErrors: [],
             isLoading: false,
         }
     },
-    mounted() {
-        const assemblyId = this.$route.params.id;
-        this.fetchAssembly(assemblyId);
-        this.fetchComponents();
-    },
     methods: {
-        async fetchAssembly(id) {
-            let url = '/api/assemblies/' + id;
-
-            axios.get(url)
-                .then(response => this.assembly = response.data.data)
-                .catch(error => console.log(error))
-        },
-        async fetchComponents() {
-            let url = '/api/components/options';
-
-            axios.get(url)
-                .then(response => this.components = response.data.data)
-                .catch(error => console.log(error));
-        },
         async updateAssembly(assembly) {
             if (this.isLoading) return;
 
             this.isLoading = true;
             this.validationErrors = {};
 
-            assembly['component_ids'] = this.assembly.components.map(component => component.id);
-
             const serializedAssembly = new FormData()
             for (const key in assembly) {
                 if (assembly.hasOwnProperty(key)) {
-                    serializedAssembly.append(key, assembly[key]);
+                    serializedAssembly.append(key, assembly[key])
                 }
             }
 
@@ -120,7 +82,7 @@ export default {
 
             axios.post('/api/assemblies/' + assembly.id, serializedAssembly)
                 .then(response => {
-                    this.$router.push({name: 'assemblies.index'});
+                    window.location.href = route('assemblies.index');
                 })
                 .catch(error => {
                     if (error.response?.data) {

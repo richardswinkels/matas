@@ -3,5 +3,5 @@
 @section('title', 'Edit assembly')
 
 @section('content')
-    <assemblies.edit></assemblies.edit>
+    <assemblies.edit :assembly='@json($assembly)'></assemblies.edit>
 @endsection
