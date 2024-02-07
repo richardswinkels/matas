@@ -1,9 +1,9 @@
 import './bootstrap';
+import {createApp} from 'vue';
+
 import registerViews from './Views/index.js';
 
 import { ZiggyVue } from 'ziggy-js';
-
-import {createApp} from 'vue';
 
 createApp({})
     .use(registerViews)

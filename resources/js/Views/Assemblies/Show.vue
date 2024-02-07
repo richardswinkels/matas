@@ -42,7 +42,7 @@
                     </li>
                 </ul>
             </div>
-            <div>
+            <div v-if="canPurchase">
                 <input v-model="quantity" type="number" min="1"
                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-24"/>
                 <button
@@ -70,6 +70,11 @@ export default {
         return {
             quantity: '',
         }
+    },
+    computed: {
+        canPurchase() {
+            return User !== null;
+        },
     },
     methods: {
         formatEuro,

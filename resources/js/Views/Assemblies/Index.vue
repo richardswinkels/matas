@@ -7,7 +7,7 @@
                     <input type="text" name="search" id="search" v-model="searchQuery" @change="fetchAssemblies"
                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2"/>
                     <a :href="route('assemblies.create')"
-                                 class="px-2 py-2 rounded-lg bg-green-500 hover:bg-green-400 inline-flex">
+                                 class="px-2 py-2 rounded-lg bg-green-500 hover:bg-green-400 inline-flex" v-if="canCreate">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                              class="w-6 h-6 text-gray-100">
                             <path fill-rule="evenodd"
@@ -65,7 +65,7 @@
                                 </svg>
                             </a>
                             <a :href="route('assemblies.edit', assembly.id)"
-                                         class="px-2 py-2 rounded-lg bg-blue-500 hover:bg-blue-400 inline-flex">
+                                         class="px-2 py-2 rounded-lg bg-blue-500 hover:bg-blue-400 inline-flex" v-if="canEdit">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                      class="w-6 h-6 text-gray-100">
                                     <path
@@ -87,14 +87,9 @@
 
 <script>
 import {TailwindPagination} from 'laravel-vue-pagination';
-import {formatEuro} from "@/helpers.js";
+import {formatEuro } from "@/helpers.js";
 
 export default {
-    computed: {
-        formatEuro() {
-            return formatEuro
-        }
-    },
     data() {
         return {
             assemblies: [],
@@ -104,7 +99,16 @@ export default {
     mounted() {
         this.fetchAssemblies()
     },
+    computed: {
+        canEdit() {
+            return User?.is_admin === true;
+        },
+        canCreate() {
+            return User?.is_admin === true;
+        }
+    },
     methods: {
+        formatEuro,
         async fetchAssemblies(page = 1) {
             let url = '/api/assemblies?page=' + page;
             if (this.searchQuery) {

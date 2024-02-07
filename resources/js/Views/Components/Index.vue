@@ -7,7 +7,7 @@
                     <input type="text" name="search" id="search" v-model="searchQuery" @change="fetchComponents"
                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2"/>
                     <a :href="route('components.create')"
-                                 class="px-2 py-2 rounded-lg bg-green-500 hover:bg-green-400 inline-flex">
+                                 class="px-2 py-2 rounded-lg bg-green-500 hover:bg-green-400 inline-flex" v-if="canCreate">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                              class="w-6 h-6 text-gray-100">
                             <path fill-rule="evenodd"
@@ -78,7 +78,7 @@
                                 </svg>
                             </a>
                             <a :href="route('components.edit', component.id)"
-                                         class="px-2 py-2 rounded-lg bg-blue-500 hover:bg-blue-400 inline-flex">
+                                         class="px-2 py-2 rounded-lg bg-blue-500 hover:bg-blue-400 inline-flex" v-if="canEdit">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                      class="w-6 h-6 text-gray-100">
                                     <path
@@ -111,6 +111,14 @@ export default {
     },
     mounted() {
         this.fetchComponents()
+    },
+    computed: {
+        canEdit() {
+            return User?.is_admin === true;
+        },
+        canCreate() {
+            return User?.is_admin === true;
+        }
     },
     methods: {
         formatEuro,
