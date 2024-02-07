@@ -16,7 +16,7 @@
             <label for="price" class="block text-sm font-semibold mb-1">
                 Price:
             </label>
-            <input v-model="this.assembly.price" id="price" type="number" min="0" step="0.01"
+            <input v-model="assembly.price" id="price" type="number" min="0" step="0.01"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
                 <div v-for="message in validationErrors?.price">

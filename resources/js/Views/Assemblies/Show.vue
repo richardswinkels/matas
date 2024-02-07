@@ -34,7 +34,7 @@
                     Components:
                 </label>
                 <ul class="list-disc ml-4">
-                    <li v-for="component in this.assembly.components">
+                    <li v-for="component in assembly.components">
                         <a :href="route('components.show', component.id)"
                            class="underline hover:text-gray-500">
                             #{{ component.id }} - {{ component.name }}
@@ -47,7 +47,7 @@
                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-24"/>
                 <button
                     class="px-3 py-2 rounded-lg bg-indigo-500 hover:bg-indigo-400 text-white font-semibold text-sm"
-                    @click="purchaseAssembly(this.component.id, this.quantity)">
+                    @click="purchaseAssembly(component.id, quantity)">
                     Buy
                 </button>
             </div>

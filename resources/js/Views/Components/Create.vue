@@ -33,7 +33,7 @@
             <label for="type" class="block text-sm font-semibold mb-1">
                 Type:
             </label>
-            <input v-model="this.component.type" id="type" type="text"
+            <input v-model="component.type" id="type" type="text"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
                 <div v-for="message in validationErrors?.type">
@@ -45,7 +45,7 @@
             <label for="price" class="block text-sm font-semibold mb-1">
                 Price:
             </label>
-            <input v-model="this.component.price" id="price" type="number" min="0" step="0.01"
+            <input v-model="component.price" id="price" type="number" min="0" step="0.01"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
                 <div v-for="message in validationErrors?.price">
