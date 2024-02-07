@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreComponentRequest;
+use App\Http\Requests\UpdateComponentRequest;
 use App\Http\Resources\ComponentResource;
 use App\Models\Component;
 use App\Services\ImageService;
@@ -32,15 +34,9 @@ class ComponentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreComponentRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string',
-            'type' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'manufacturer_id' => 'required|exists:manufacturers,id',
-            'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        $validatedData = $request->validated();
 
         if ($request->hasFile('file')) {
             $imagePath = $this->imageService->storeImage($request->file('file'), 400, 400, 'components');
@@ -60,15 +56,9 @@ class ComponentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Component $component)
+    public function update(UpdateComponentRequest $request, Component $component)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string',
-            'type' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'manufacturer_id' => 'required|exists:manufacturers,id',
-            'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        $validatedData = $request->validated();
 
         if ($request->hasFile('file')) {
             $imagePath = $this->imageService->storeImage($request->file('file'), 400, 400, 'components');

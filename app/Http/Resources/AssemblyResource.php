@@ -18,6 +18,7 @@ class AssemblyResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'price' => $this->price,
+            'stock' => $this->stock,
             'image' => $this->image,
             'thumbnail' => $this->thumbnail,
             'components' => ComponentResource::collection($this->whenLoaded('components')),

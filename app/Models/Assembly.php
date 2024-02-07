@@ -20,6 +20,7 @@ class Assembly extends Model
         'image',
         'thumbnail',
         'price',
+        'stock',
     ];
 
     /**

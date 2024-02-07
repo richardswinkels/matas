@@ -54,6 +54,18 @@
             </div>
         </div>
         <div class="mt-4">
+            <label for="stock" class="block text-sm font-semibold mb-1">
+                Stock:
+            </label>
+            <input v-model="component.stock" id="stock" type="number" min="0"
+                   class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
+            <div class="text-red-600 text-sm mt-1">
+                <div v-for="message in validationErrors?.stock">
+                    {{ message }}
+                </div>
+            </div>
+        </div>
+        <div class="mt-4">
             <label for="image" class="block text-sm font-semibold mb-1">
                 Image:
             </label>
@@ -83,8 +95,9 @@ export default {
             component: {
                 'name': '',
                 'type': '',
-                'price': '',
-                'manufacturer_id': '',
+                'price': 0.00,
+                'stock': 0,
+                'manufacturer_id': null,
                 'file': '',
             },
             manufacturers: [],

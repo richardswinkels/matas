@@ -33,6 +33,9 @@
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Price</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left">
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Stock</span>
+                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-left">
 
                     </th>
                 </tr>
@@ -51,6 +54,9 @@
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                         {{ formatEuro(assembly.price) }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
+                        {{ assembly.stock }}
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 text-right">
                         <div class="inline-flex gap-2 justify-self-end">

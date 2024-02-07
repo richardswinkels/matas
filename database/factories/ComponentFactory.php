@@ -20,6 +20,7 @@ class ComponentFactory extends Factory
             'name' => $this->faker->word(),
             'type' => $this->faker->word(),
             'price' => $this->faker->randomFloat(2, 0, 10),
+            'stock' => rand(0, 10000),
         ];
     }
 }

@@ -19,6 +19,7 @@ class ComponentResource extends JsonResource
             'name' => $this->name,
             'type' => $this->type,
             'price' => $this->price,
+            'stock' => $this->stock,
             'image' => $this->image,
             'thumbnail' => $this->thumbnail,
             'manufacturer' => new ManufacturerResource($this->manufacturer),

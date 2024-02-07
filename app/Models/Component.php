@@ -23,6 +23,7 @@ class Component extends Model
         'image',
         'thumbnail',
         'price',
+        'stock',
     ];
 
     /**
