@@ -1,8 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\Assembly\AssemblyComponentController;
 use App\Http\Controllers\Api\AssemblyController;
-use App\Http\Controllers\Api\Auth\LoginController;
-use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\ComponentController;
 use App\Http\Controllers\Api\ManufacturerController;
 use Illuminate\Support\Facades\Route;
@@ -26,4 +25,8 @@ Route::group(['middleware' => ['auth.admin']], function () {
 
     Route::apiResource('components', ComponentController::class)->only('store', 'update');
     Route::apiResource('assemblies', AssemblyController::class)->only('store', 'update');
+
+    Route::post('assemblies/{assembly}/components/{component}', [AssemblyComponentController::class, 'store'])->name('assembly.components.store');
+    Route::get('assemblies/{assembly}/components', [AssemblyComponentController::class, 'show'])->name('assembly.components.show');
+    Route::delete('assemblies/{assembly}/components/{component}', [AssemblyComponentController::class, 'destroy'])->name('assembly.components.destroy');
 });

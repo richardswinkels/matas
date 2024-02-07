@@ -25,10 +25,19 @@ class ComponentController extends Controller
      */
     public function index(Request $request)
     {
-        $components = Component::filter($request->only('search'))
-            ->paginate(10);
+        $query = Component::filter($request->only('search'));
+
+        if ($request->has('page')) {
+            $components = $query->paginate(10);
+        } else {
+            $components = $query->get();
+        }
 
         return ComponentResource::collection($components);
+    }
+
+    public function show(Component $component) {
+        return new ComponentResource($component);
     }
 
     /**
