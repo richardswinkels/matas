@@ -25,11 +25,11 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <a href="{{ route('components.index') }}"
-                       class="active:border-b-2 active:border-indigo-400 inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
+                       class="{{ request()->is('components*') ? 'border-b-2 border-indigo-400' : '' }} inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
                         Components
                     </a>
                     <a href="{{ route('assemblies.index') }}"
-                       class="active:border-b-2 active:border-indigo-400 inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
+                       class="{{ request()->is('assemblies*') ? 'border-b-2 border-indigo-400' : '' }} inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
                         Assemblies
                     </a>
                 </div>
