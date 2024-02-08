@@ -17,6 +17,8 @@ class UserAssemblyController extends Controller
         $user = Auth::user();
 
         $userAssemblies = $user->assemblies()
+            ->withPivot('quantity', 'created_at')
+            ->orderByPivot('created_at', 'desc')
             ->paginate(10);
 
         return UserAssemblyResource::collection($userAssemblies);

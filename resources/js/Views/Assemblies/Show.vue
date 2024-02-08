@@ -48,7 +48,7 @@
                     <label class="font-bold">
                         Components:
                     </label>
-                    <ul class="list-disc ml-4">
+                    <ul>
                         <li v-for="component in assembly.components">
                             <a :href="route('components.show', component.id)"
                                class="underline hover:text-gray-500">
