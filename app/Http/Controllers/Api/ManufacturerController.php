@@ -6,10 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ManufacturerResource;
 use App\Models\Manufacturer;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ManufacturerController extends Controller
 {
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         $manufacturers = Manufacturer::all();
 

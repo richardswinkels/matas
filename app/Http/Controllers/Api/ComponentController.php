@@ -8,7 +8,9 @@ use App\Http\Requests\UpdateComponentRequest;
 use App\Http\Resources\ComponentResource;
 use App\Models\Component;
 use App\Services\ImageService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Storage;
 
 class ComponentController extends Controller
@@ -23,7 +25,7 @@ class ComponentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): AnonymousResourceCollection
     {
         $query = Component::filter($request->only('search'));
 
@@ -36,14 +38,15 @@ class ComponentController extends Controller
         return ComponentResource::collection($components);
     }
 
-    public function show(Component $component) {
+    public function show(Component $component): ComponentResource
+    {
         return new ComponentResource($component);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreComponentRequest $request)
+    public function store(StoreComponentRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
 
@@ -65,7 +68,7 @@ class ComponentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateComponentRequest $request, Component $component)
+    public function update(UpdateComponentRequest $request, Component $component): JsonResponse
     {
         $validatedData = $request->validated();
 
@@ -94,7 +97,7 @@ class ComponentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Component $component)
+    public function destroy(Component $component): JsonResponse
     {
         $component->delete();
 

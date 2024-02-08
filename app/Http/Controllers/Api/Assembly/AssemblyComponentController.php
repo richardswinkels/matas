@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Api\Assembly;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AssemblyComponentResource;
+use App\Http\Resources\Assembly\AssemblyComponentResource;
 use App\Models\Assembly;
 use App\Models\Component;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AssemblyComponentController extends Controller

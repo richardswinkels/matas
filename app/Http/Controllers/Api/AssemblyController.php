@@ -8,7 +8,9 @@ use App\Http\Requests\UpdateAssemblyRequest;
 use App\Http\Resources\AssemblyResource;
 use App\Models\Assembly;
 use App\Services\ImageService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Storage;
 
 class AssemblyController extends Controller
@@ -23,7 +25,7 @@ class AssemblyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): AnonymousResourceCollection
     {
         $assemblies = Assembly::filter($request->only('search'))
             ->paginate(10);
@@ -34,7 +36,7 @@ class AssemblyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAssemblyRequest $request)
+    public function store(StoreAssemblyRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
 
@@ -56,7 +58,7 @@ class AssemblyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAssemblyRequest $request, Assembly $assembly)
+    public function update(UpdateAssemblyRequest $request, Assembly $assembly): JsonResponse
     {
         $validatedData = $request->validated();
 
@@ -85,7 +87,7 @@ class AssemblyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Assembly $assembly)
+    public function destroy(Assembly $assembly): JsonResponse
     {
         $assembly->delete();
 
