@@ -122,9 +122,9 @@ export default {
     },
     methods: {
         async fetchAssemblyComponents() {
-            let url = '/api/assemblies/' + this.assembly.id + '/components';
+            // let url = '/api/assemblies/' + this.assembly.id + '/components';
 
-            axios.get(url)
+            axios.get(`/api/assemblies/${this.assembly.id}/components`)
                 .then(response => this.assemblyData['components'] = response.data.data)
                 .catch(error => console.log(error));
         },

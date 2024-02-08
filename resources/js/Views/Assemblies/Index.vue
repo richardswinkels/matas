@@ -86,7 +86,7 @@
                 </tbody>
             </table>
             <TailwindPagination :data="assemblies" :limit="1" :keepLength="true"
-                                @pagination-change-page="fetchAssemblies" class="mt-4"/>
+                                @pagination-change-page="onPageChange" class="mt-4"/>
         </div>
     </div>
 </template>
@@ -98,8 +98,9 @@ import {formatEuro } from "@/helpers.js";
 export default {
     data() {
         return {
+            page: 1,
             assemblies: [],
-            searchQuery: '',
+            searchQuery: null,
         }
     },
     mounted() {
@@ -115,15 +116,34 @@ export default {
     },
     methods: {
         formatEuro,
-        async fetchAssemblies(page = 1) {
-            let url = '/api/assemblies?page=' + page;
-            if (this.searchQuery) {
-                url += '&search=' + this.searchQuery;
-            }
+        onPageChange(page) {
+            this.page = page
 
-            axios.get(url)
-                .then(response => this.assemblies = response.data)
-                .catch(error => console.log(error))
+            this.fetchAssemblies()
+        },
+
+        async fetchAssemblies() {
+            // axios.get('/api/assemblies', {
+            //     params: {
+            //         page: this.page,
+            //         search: this.searchQuery
+            //     }
+            // })
+            //     .then(response => this.assemblies = response.data)
+            //     .catch(error => console.log(error))
+
+            try {
+                const response = await axios.get('/api/assemblies', {
+                    params: {
+                        page: this.page,
+                        search: this.searchQuery
+                    }
+                })
+
+                this.assemblies = response.data
+            } catch (error) {
+                console.log(error)
+            }
         },
     },
     components: {

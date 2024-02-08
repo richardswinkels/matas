@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 class AssemblyController extends Controller
 {
-    protected $imageService;
+    protected ImageService $imageService;
 
     public function __construct(ImageService $imageService)
     {
@@ -71,12 +71,12 @@ class AssemblyController extends Controller
                 'thumbnail' => $thumbnailPath,
             ]);
 
-            if ($assembly->image) {
-                Storage::delete($assembly->image);
-            }
-            if ($assembly->thumbnail) {
-                Storage::delete($assembly->thumbnail);
-            }
+//            if ($assembly->image) {
+//                Storage::delete($assembly->image);
+//            }
+//            if ($assembly->thumbnail) {
+//                Storage::delete($assembly->thumbnail);
+//            }
         }
 
         $assembly->update($validatedData);

@@ -131,7 +131,7 @@ export default {
 
             axios.post('/api/components', serializedComponent)
                 .then(response => {
-                    window.location.href = route('assemblies.index');
+                    window.location.href = route('components.index');
                 })
                 .catch(error => {
                     if (error.response?.data) {

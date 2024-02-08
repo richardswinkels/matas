@@ -1,13 +1,13 @@
 <template>
-    <form @submit.prevent="storeAssembly(assembly)">
+    <form @submit.prevent="store">
         <div>
             <label for="name" class="block text-sm font-semibold mb-1">
                 Name:
             </label>
-            <input v-model="assembly.name" id="name" type="text"
+            <input v-model="form.name" id="name" type="text"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in validationErrors?.name">
+                <div v-for="message in form.errors.get('name')">
                     {{ message }}
                 </div>
             </div>
@@ -16,10 +16,10 @@
             <label for="price" class="block text-sm font-semibold mb-1">
                 Price:
             </label>
-            <input v-model="assembly.price" id="price" type="number" min="0" step="0.01"
+            <input v-model="form.price" id="price" type="number" min="0" step="0.01"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in validationErrors?.price">
+                <div v-for="message in form.errors.get('price')">
                     {{ message }}
                 </div>
             </div>
@@ -28,10 +28,10 @@
             <label for="stock" class="block text-sm font-semibold mb-1">
                 Stock:
             </label>
-            <input v-model="assembly.stock" id="stock" type="number" min="0"
+            <input v-model="form.stock" id="stock" type="number" min="0"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in validationErrors?.stock">
+                <div v-for="message in form.errors.get('stock')">
                     {{ message }}
                 </div>
             </div>
@@ -40,9 +40,9 @@
             <label for="image" class="block text-sm font-semibold mb-1">
                 Image:
             </label>
-            <input @change="assembly.file = $event.target.files[0]" type="file" id="image"/>
+            <input @change="form.file = $event.target.files[0]" type="file" id="image"/>
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in validationErrors?.file">
+                <div v-for="message in form.errors.get('file')">
                     {{ message }}
                 </div>
             </div>
@@ -50,9 +50,9 @@
         <div class="mt-4">
             <button type="submit"
                     class="px-3 py-2 rounded-lg bg-indigo-500 hover:bg-indigo-400 text-white font-semibold text-sm inline-flex">
-                <span v-show="isLoading"
+                <span v-show="form.processing"
                       class="inline-block animate-spin w-4 h-4 mr-2 border-t-2 border-t-white border-r-2 border-r-white border-b-2 border-b-white border-l-2 border-l-blue-600 rounded-full"></span>
-                <span v-if="isLoading">Processing...</span>
+                <span v-if="form.processing">Processing...</span>
                 <span v-else>Save</span>
             </button>
         </div>
@@ -60,44 +60,28 @@
 </template>
 
 <script>
+import Form from "form-backend-validation";
+
 export default {
     data() {
         return {
-            assembly: {
+            form: new Form({
                 'name': '',
                 'price': 0.00,
                 'stock': 0,
-                'image': '',
-            },
-            components: [],
-            validationErrors: [],
-            isLoading: false,
+                'file': '',
+            }),
         }
     },
     methods: {
-        async storeAssembly(assembly) {
-            if (this.isLoading) return;
+        async store() {
+            try {
+                await this.form.post('/api/assemblies')
 
-            this.isLoading = true
-            this.validationErrors = {}
-
-            const serializedAssembly = new FormData()
-            for (const key in assembly) {
-                if (assembly.hasOwnProperty(key)) {
-                    serializedAssembly.append(key, assembly[key])
-                }
+                window.location.href = route('assemblies.index')
+            } catch (error) {
+                console.log(error)
             }
-
-            axios.post('/api/assemblies', serializedAssembly)
-                .then(response => {
-                    window.location.href = route('assemblies.index');
-                })
-                .catch(error => {
-                    if (error.response?.data) {
-                        this.validationErrors = error.response.data.errors;
-                        this.isLoading = false;
-                    }
-                });
         },
     },
 }
