@@ -93,9 +93,8 @@ export default {
             axios.post(url, {
                 'quantity': quantity
             })
-                .then(response =>  {
+                .then(() =>  {
                     this.quantity = 0;
-                    this.assembly = response.data.data;
                 })
                 .catch(error => {
                     if (error.response?.data) {

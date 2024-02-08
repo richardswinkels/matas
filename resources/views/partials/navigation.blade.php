@@ -36,13 +36,13 @@
             </div>
             <div class="flex self-center">
                 @guest
-                    <a href="{{ route('login') }}" class="underline text-sm">Login</a>
+                    <a href="{{ route('login') }}" class="underline text-sm hover:text-gray-500">Login</a>
                 @endguest
                 @auth
                     <div class="flex items-center gap-4">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" class="underline text-sm">
+                            <button type="submit" class="underline text-sm hover:text-gray-500">
                                 Log out
                             </button>
                         </form>
