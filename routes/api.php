@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Assembly\AssemblyComponentController;
 use App\Http\Controllers\Api\AssemblyController;
 use App\Http\Controllers\Api\ComponentController;
 use App\Http\Controllers\Api\ManufacturerController;
+use App\Http\Controllers\Api\User\UserAssemblyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +20,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('components', ComponentController::class)->only('index');
 Route::apiResource('assemblies', AssemblyController::class)->only('index');
+
+Route::group(['middleware' => ['auth']], function (){
+    Route::get('user/assemblies', [UserAssemblyController::class, 'index'])->name('user.assemblies.index');
+    Route::post('user/assemblies/{assembly}', [UserAssemblyController::class, 'store'])->name('user.assemblies.store');
+});
 
 Route::group(['middleware' => ['auth.admin']], function () {
     Route::get('manufacturers', [ManufacturerController::class, 'index'])->name('manufacturers.index');

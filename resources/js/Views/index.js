@@ -10,5 +10,6 @@ export default {
         app.component('components.show', defineAsyncComponent(() => import('./Components/Show.vue')))
         app.component('components.create', defineAsyncComponent(() => import('./Components/Create.vue')))
         app.component('components.edit', defineAsyncComponent(() => import('./Components/Edit.vue')))
+        app.component('users.show', defineAsyncComponent(() => import('./Users/Show.vue')))
     }
 }

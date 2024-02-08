@@ -49,6 +49,6 @@ class Assembly extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_assemblies');
+        return $this->belongsToMany(User::class, 'user_assemblies')->withTimestamps();
     }
 }

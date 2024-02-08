@@ -21,9 +21,7 @@ class AssemblySeeder extends Seeder
             $components = Component::inRandomOrder()->take(10)->get();
 
             // Attach components to the assembly
-            $assembly->components()->attach($components, [
-                'location' => fake()->unique()->text(10),
-            ]);
+            $assembly->components()->attach($components);
         }
     }
 }

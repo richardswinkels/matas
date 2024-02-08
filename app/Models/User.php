@@ -48,7 +48,7 @@ class User extends Authenticatable
 
     public function assemblies(): BelongsToMany
     {
-        return $this->belongsToMany(Assembly::class, 'user_assemblies');
+        return $this->belongsToMany(Assembly::class, 'user_assemblies')->withTimestamps();
     }
 
     public function isAdmin(): bool
