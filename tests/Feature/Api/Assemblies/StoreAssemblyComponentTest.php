@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class StoreAssemblyComponentTest extends TestCase
 {
-    public function test_admin_can_add_components_to_assembly()
+    public function test_admin_can_add_components_to_assembly(): void
     {
         $assembly = Assembly::factory()->create();
         $component = Component::factory()->create();
@@ -30,7 +30,7 @@ class StoreAssemblyComponentTest extends TestCase
         ]);
     }
 
-    public function test_user_cannot_add_components_to_assembly()
+    public function test_user_cannot_add_components_to_assembly(): void
     {
         $assembly = Assembly::factory()->create();
         $component = Component::factory()->create();
@@ -45,7 +45,7 @@ class StoreAssemblyComponentTest extends TestCase
         ]);
     }
 
-    public function test_guest_cannot_add_components_to_assembly()
+    public function test_guest_cannot_add_components_to_assembly(): void
     {
         $assembly = Assembly::factory()->create();
         $component = Component::factory()->create();

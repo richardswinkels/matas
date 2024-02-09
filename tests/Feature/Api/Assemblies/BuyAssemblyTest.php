@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class BuyAssemblyTest extends TestCase
 {
-    public function test_user_can_buy_assembly()
+    public function test_user_can_buy_assembly(): void
     {
         $user = User::factory()->create();
 
@@ -33,7 +33,7 @@ class BuyAssemblyTest extends TestCase
             ]);
     }
 
-    public function test_guest_cannot_buy_assembly()
+    public function test_guest_cannot_buy_assembly(): void
     {
         $assembly = Assembly::factory()->create([
             'price' => 100,

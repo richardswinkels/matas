@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class GetAssembliesTest extends TestCase
 {
-    public function test_anyone_can_get_paginated_assemblies()
+    public function test_anyone_can_get_paginated_assemblies(): void
     {
         Assembly::factory()->createMany(15);
 
@@ -41,7 +41,7 @@ class GetAssembliesTest extends TestCase
             ->assertStatus(Response::HTTP_OK);
     }
 
-    public function test_anyone_can_search_and_get_assemblies()
+    public function test_anyone_can_search_and_get_assemblies(): void
     {
         Assembly::factory()->create(['name' => 'TestAssembly']);
         Assembly::factory()->createMany(10);

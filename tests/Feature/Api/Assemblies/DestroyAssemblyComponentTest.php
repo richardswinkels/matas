@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class DestroyAssemblyComponentTest extends TestCase
 {
-    public function test_admin_can_remove_components_from_assembly()
+    public function test_admin_can_remove_components_from_assembly(): void
     {
         $assembly = Assembly::factory()->create();
         $component = Component::factory()->create();
@@ -30,7 +30,7 @@ class DestroyAssemblyComponentTest extends TestCase
         ]);
     }
 
-    public function test_user_cannot_remove_components_from_assembly()
+    public function test_user_cannot_remove_components_from_assembly(): void
     {
         $assembly = Assembly::factory()->create();
         $component = Component::factory()->create();
@@ -40,7 +40,7 @@ class DestroyAssemblyComponentTest extends TestCase
             ->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
-    public function test_guest_cannot_remove_components_from_assembly()
+    public function test_guest_cannot_remove_components_from_assembly(): void
     {
         $assembly = Assembly::factory()->create();
         $component = Component::factory()->create();
