@@ -24,7 +24,7 @@
             </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200 divide-solid">
-            <tr v-for="userAssembly in userAssemblies">
+            <tr v-for="userAssembly in userAssemblies.data">
                 <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                     {{ userAssembly.assembly.id }}
                 </td>
@@ -56,7 +56,7 @@
         </tbody>
     </table>
     <TailwindPagination :data="userAssemblies" :limit="1" :keepLength="true"
-                        @pagination-change-page="fetchUserAssemblies" class="mt-4"/>
+                        @pagination-change-page="onPageChange" class="mt-4"/>
 </template>
 
 <script>
@@ -67,6 +67,7 @@ export default {
     data() {
         return {
             'userAssemblies': [],
+            'page': 1,
         }
     },
     components: {
@@ -77,12 +78,22 @@ export default {
     },
     methods: {
         ...{ formatEuro, formatDate},
+        onPageChange(page) {
+            this.page = page
+            this.fetchUserAssemblies()
+        },
         async fetchUserAssemblies(page = 1) {
-            let url = '/api/user/assemblies?page=' + page;
+            try {
+                const response = await axios.get(route('api.user.assemblies.index'), {
+                    params: {
+                        page: this.page
+                    }
+                })
 
-            axios.get(url)
-                .then(response => this.userAssemblies = response.data.data)
-                .catch(error => console.log(error))
+                this.userAssemblies = response.data
+            } catch (error) {
+                console.log(error)
+            }
         },
     },
 }
