@@ -19,7 +19,6 @@ class BuyAssemblyController extends Controller
         $user = Auth::user();
         $user->assemblies()->attach($assembly->id, [
             'quantity' => $validatedData['quantity'],
-            'price'    =>  $validatedData['quantity'] * $assembly->price,
         ]);
 
         return response()->json(['message' => 'Assemblies purchased successfully']);

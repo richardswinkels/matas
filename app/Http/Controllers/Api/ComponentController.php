@@ -11,6 +11,7 @@ use App\Services\ImageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 
 class ComponentController extends Controller
@@ -62,7 +63,7 @@ class ComponentController extends Controller
 
         Component::create($validatedData);
 
-        return response()->json(['message' => 'Component created successfully'], 201);
+        return response()->json(['message' => 'Component created successfully'], Response::HTTP_CREATED);
     }
 
     /**
@@ -91,7 +92,7 @@ class ComponentController extends Controller
 
         $component->update($validatedData);
 
-        return response()->json(['message' => 'Component updated successfully'], 201);
+        return response()->json(['message' => 'Component updated successfully'], Response::HTTP_OK);
     }
 
     /**
@@ -101,6 +102,6 @@ class ComponentController extends Controller
     {
         $component->delete();
 
-        return response()->json(['message' => 'Component deleted successfully'], 200);
+        return response()->json(['message' => 'Component deleted successfully'], Response::HTTP_OK);
     }
 }

@@ -11,7 +11,8 @@ use App\Services\ImageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Http;
 
 class AssemblyController extends Controller
 {
@@ -50,9 +51,9 @@ class AssemblyController extends Controller
             ]);
         }
 
-        $assembly = Assembly::create($validatedData);
+        Assembly::create($validatedData);
 
-        return response()->json(['message' => 'Assembly created successfully'], 201);
+        return response()->json(['message' => 'Assembly created successfully'], Response::HTTP_CREATED);
     }
 
     /**
@@ -81,7 +82,7 @@ class AssemblyController extends Controller
 
         $assembly->update($validatedData);
 
-        return response()->json(['message' => 'Assembly updated successfully'], 201);
+        return response()->json(['message' => 'Assembly updated successfully'], Response::HTTP_OK);
     }
 
     /**
@@ -91,6 +92,6 @@ class AssemblyController extends Controller
     {
         $assembly->delete();
 
-        return response()->json(['message' => 'Assembly deleted successfully'], 200);
+        return response()->json(['message' => 'Assembly deleted successfully'], Response::HTTP_OK);
     }
 }

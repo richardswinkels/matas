@@ -5,6 +5,7 @@ namespace Tests\Feature\Assemblies;
 use App\Models\Assembly;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
 use Tests\TestCase;
 
 class ViewAssemblyShowPageTest extends TestCase
@@ -17,7 +18,7 @@ class ViewAssemblyShowPageTest extends TestCase
         $assembly = Assembly::factory()->create();
 
         $this->get("/assemblies/{$assembly->id}")
-            ->assertStatus(200)
+            ->assertStatus(Response::HTTP_OK)
             ->assertViewIs('assemblies.show');
     }
 }

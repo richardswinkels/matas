@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Manufacturer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,6 +22,7 @@ class ComponentFactory extends Factory
             'type' => $this->faker->word(),
             'price' => $this->faker->randomFloat(2, 0, 10),
             'stock' => rand(0, 10000),
+            'manufacturer_id' => Manufacturer::factory()->create()->id,
         ];
     }
 }
