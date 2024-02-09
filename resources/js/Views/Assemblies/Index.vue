@@ -118,22 +118,11 @@ export default {
         formatEuro,
         onPageChange(page) {
             this.page = page
-
             this.fetchAssemblies()
         },
-
         async fetchAssemblies() {
-            // axios.get('/api/assemblies', {
-            //     params: {
-            //         page: this.page,
-            //         search: this.searchQuery
-            //     }
-            // })
-            //     .then(response => this.assemblies = response.data)
-            //     .catch(error => console.log(error))
-
             try {
-                const response = await axios.get('/api/assemblies', {
+                const response = await axios.get(route('api.assemblies.index'), {
                     params: {
                         page: this.page,
                         search: this.searchQuery

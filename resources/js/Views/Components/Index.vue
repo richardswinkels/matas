@@ -99,7 +99,7 @@
                 </tbody>
             </table>
             <TailwindPagination :data="components" :limit="1" :keepLength="true"
-                                @pagination-change-page="fetchComponents" class="mt-4"/>
+                                @pagination-change-page="onPageChange" class="mt-4"/>
         </div>
     </div>
 </template>
@@ -113,6 +113,7 @@ export default {
         return {
             components: [],
             searchQuery: '',
+            page: 1,
         }
     },
     mounted() {
@@ -120,23 +121,31 @@ export default {
     },
     computed: {
         canEdit() {
-            return User?.is_admin === true;
+            return User?.is_admin === true
         },
         canCreate() {
-            return User?.is_admin === true;
+            return User?.is_admin === true
         }
     },
     methods: {
         formatEuro,
+        onPageChange(page) {
+            this.page = page
+            this.fetchComponents()
+        },
         async fetchComponents(page = 1) {
-            let url = '/api/components?page=' + page;
-            if (this.searchQuery) {
-                url += '&search=' + this.searchQuery;
-            }
+            try {
+                const response = await axios.get(route('api.components.index'), {
+                    params: {
+                        page: this.page,
+                        search: this.searchQuery
+                    }
+                })
 
-            axios.get(url)
-                .then(response => this.components = response.data)
-                .catch(error => console.log(error))
+                this.components = response.data;
+            } catch(error) {
+                console.log(error)
+            }
         },
     },
     components: {
