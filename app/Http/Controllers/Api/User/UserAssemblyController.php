@@ -23,17 +23,4 @@ class UserAssemblyController extends Controller
 
         return UserAssemblyResource::collection($userAssemblies);
     }
-
-    public function store(StoreUserAssemblyRequest $request, Assembly $assembly): JsonResponse
-    {
-        $validatedData = $request->validated();
-
-        $user = Auth::user();
-        $user->assemblies()->attach($assembly->id, [
-            'quantity' => $validatedData['quantity'],
-            'price'    =>  $validatedData['quantity'] * $assembly->price,
-        ]);
-
-        return response()->json(['message' => 'Assemblies purchased successfully']);
-    }
 }
