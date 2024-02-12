@@ -4,7 +4,7 @@
             <div class="w-full mb-4 flex justify-end">
                 <div class="flex justify-center">
                     <label for="search" class="mr-2 text-sm self-center">Search:</label>
-                    <input type="text" name="search" id="search" v-model="searchQuery" @change="fetchAssemblies"
+                    <input type="text" name="search" id="search" v-model="searchQuery" @change="onSearch"
                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2"/>
                     <a :href="route('assemblies.create')"
                                  class="px-2 py-2 rounded-lg bg-green-500 hover:bg-green-400 inline-flex" v-if="canCreate">
@@ -91,52 +91,44 @@
     </div>
 </template>
 
-<script>
-import {TailwindPagination} from 'laravel-vue-pagination';
-import {formatEuro } from "@/helpers.js";
+<script setup>
+import {formatEuro } from "@/helpers.js"
+import {ref, computed, onMounted} from "vue"
+import {TailwindPagination} from 'laravel-vue-pagination'
 
-export default {
-    data() {
-        return {
-            page: 1,
-            assemblies: [],
-            searchQuery: null,
-        }
-    },
-    mounted() {
-        this.fetchAssemblies()
-    },
-    computed: {
-        canEdit() {
-            return User?.is_admin === true;
-        },
-        canCreate() {
-            return User?.is_admin === true;
-        }
-    },
-    methods: {
-        formatEuro,
-        onPageChange(page) {
-            this.page = page
-            this.fetchAssemblies()
-        },
-        async fetchAssemblies() {
-            try {
-                const response = await axios.get(route('api.assemblies.index'), {
-                    params: {
-                        page: this.page,
-                        search: this.searchQuery
-                    }
-                })
+const page = ref(1)
+const assemblies = ref([])
+const searchQuery = ref(null)
 
-                this.assemblies = response.data
-            } catch (error) {
-                console.log(error)
+const fetchAssemblies = async () => {
+    try {
+        const response = await axios.get(route('api.assemblies.index'), {
+            params: {
+                page: page.value,
+                search: searchQuery.value
             }
-        },
-    },
-    components: {
-        TailwindPagination,
+        })
+
+        assemblies.value = response.data;
+    } catch (error) {
+        console.log(error)
     }
+}
+
+const canEdit = computed(() => User?.is_admin === true)
+const canCreate = computed(() => User?.is_admin === true)
+
+onMounted(() => {
+    fetchAssemblies()
+})
+
+const onPageChange = (newPage) => {
+    page.value = newPage
+    fetchAssemblies()
+}
+
+const onSearch = () => {
+    page.value = 1
+    fetchAssemblies()
 }
 </script>

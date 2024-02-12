@@ -4,16 +4,16 @@
             <img :src="assembly.image ? `/storage/${assembly.image}` : '/images/no-image.svg'"
                  :alt="assembly.name" class="h-[400px] w-[400px]"/>
             <div v-if="canPurchase" class="self-center mx-auto">
-                <input v-model="quantity" type="number" min="1"
+                <input v-model="form.quantity" type="number" min="1"
                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-48"/>
                 <button
                     class="px-3 py-2 rounded-lg bg-indigo-500 hover:bg-indigo-400 text-white font-semibold text-sm"
-                    @click="purchaseAssembly(assembly.id, quantity)">
+                    @click="purchaseAssembly">
                     Buy
                 </button>
 
                 <div class="text-red-600 text-sm mt-1">
-                    <div v-for="message in validationErrors?.quantity">
+                    <div v-for="message in form.errors.get('quantity')">
                         {{ message }}
                     </div>
                 </div>
@@ -61,48 +61,32 @@
     </div>
 </template>
 
+<script setup>
+import {ref, computed} from "vue"
+import {formatEuro} from "@/helpers.js"
+import Form from "form-backend-validation";
 
-<script>
-import {formatEuro} from "@/helpers.js";
+const props = defineProps({
+    assembly: {
+        type: Object,
+        required: true
+    }
+})
 
-export default {
-    props: {
-        assembly: {
-            type: Object,
-            required: true,
-        }
-    },
-    data() {
-        return {
-            quantity: 0,
-            validationErrors: [],
-        }
-    },
-    computed: {
-        canPurchase() {
-            return User !== null;
-        },
-    },
-    methods: {
-        formatEuro,
-        async purchaseAssembly(id, quantity) {
-            let url = '/api/user/assemblies/' + id;
+const quantity = ref(0);
 
-            this.validationErrors = {};
+const form = new Form({
+    'quantity': quantity.value,
+})
 
-            axios.post(url, {
-                'quantity': quantity
-            })
-                .then(() =>  {
-                    this.quantity = 0;
-                })
-                .catch(error => {
-                    if (error.response?.data) {
-                        this.validationErrors = error.response.data.errors;
-                        this.isLoading = false;
-                    }
-                })
-        },
-    },
+const purchaseAssembly = async () => {
+    try {
+        await form.post(route('api.user.assemblies.store', props.assembly.id))
+        quantity.value = 0
+    } catch (error) {
+        console.log(error)
+    }
 }
+
+const canPurchase = computed(() => User !== null)
 </script>

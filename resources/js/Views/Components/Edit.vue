@@ -1,13 +1,13 @@
 <template>
-    <form @submit.prevent="updateComponent(componentData)">
+    <form @submit.prevent="update">
         <div>
             <label for="name" class="block text-sm font-semibold mb-1">
                 Name:
             </label>
-            <input v-model="componentData.name" id="name" type="text"
+            <input v-model="form.name" id="name" type="text"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in validationErrors?.name">
+                <div v-for="message in form.errors.get('name')">
                     {{ message }}
                 </div>
             </div>
@@ -16,15 +16,15 @@
             <label for="manufacturer" class="block text-sm font-semibold mb-1">
                 Manufacturer:
             </label>
-            <select v-model="componentData.manufacturer_id" id="manufacturer"
+            <select v-model="form.manufacturer_id" id="manufacturer"
                     class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
                 <option value="" selected>Choose manufacturer</option>
-                <option v-for="manufacturer in manufacturers" :value="manufacturer.id">
+                <option v-for="manufacturer in manufacturers.data" :value="manufacturer.id">
                     #{{ manufacturer.id }} - {{ manufacturer.name }}
                 </option>
             </select>
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in validationErrors?.manufacturer_id">
+                <div v-for="message in form.errors.get('manufacturer_id')">
                     {{ message }}
                 </div>
             </div>
@@ -33,10 +33,10 @@
             <label for="type" class="block text-sm font-semibold mb-1">
                 Type:
             </label>
-            <input v-model="componentData.type" id="type" type="text"
+            <input v-model="form.type" id="type" type="text"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in validationErrors?.type">
+                <div v-for="message in form.errors.get('type')">
                     {{ message }}
                 </div>
             </div>
@@ -45,10 +45,10 @@
             <label for="price" class="block text-sm font-semibold mb-1">
                 Price:
             </label>
-            <input v-model="componentData.price" id="price" type="number" min="0" step="0.01"
+            <input v-model="form.price" id="price" type="number" min="0" step="0.01"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in validationErrors?.price">
+                <div v-for="message in form.errors.get('price')">
                     {{ message }}
                 </div>
             </div>
@@ -57,10 +57,10 @@
             <label for="stock" class="block text-sm font-semibold mb-1">
                 Stock:
             </label>
-            <input v-model="componentData.stock" id="stock" type="number" min="0"
+            <input v-model="form.stock" id="stock" type="number" min="0"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in validationErrors?.stock">
+                <div v-for="message in form.errors.get('stock')">
                     {{ message }}
                 </div>
             </div>
@@ -69,9 +69,9 @@
             <label for="image" class="block text-sm font-semibold mb-1">
                 Image:
             </label>
-            <input @change="componentData.file = $event.target.files[0]" type="file" id="image"/>
+            <input @change="form.file = $event.target.files[0]" type="file" id="image"/>
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in validationErrors?.file">
+                <div v-for="message in form.errors.get('file')">
                     {{ message }}
                 </div>
             </div>
@@ -79,70 +79,57 @@
         <div class="mt-4">
             <button type="submit"
                     class="px-3 py-2 rounded-lg bg-indigo-500 hover:bg-indigo-400 text-white font-semibold text-sm inline-flex">
-                <span v-show="isLoading"
+                <span v-show="form.processing"
                       class="inline-block animate-spin w-4 h-4 mr-2 border-t-2 border-t-white border-r-2 border-r-white border-b-2 border-b-white border-l-2 border-l-blue-600 rounded-full"></span>
-                <span v-if="isLoading">Processing...</span>
+                <span v-if="form.processing">Processing...</span>
                 <span v-else>Save</span>
             </button>
         </div>
     </form>
 </template>
 
-<script>
-export default {
-    props: {
-        component: {
-            type: Object,
-            required: true,
-        }
-    },
-    data() {
-        return {
-            componentData: {
-                ...this.component
-            },
-            manufacturers: [],
-            validationErrors: [],
-            isLoading: false,
-        }
-    },
-    mounted() {
-        this.fetchManufacturers()
-    },
-    methods: {
-        async fetchManufacturers() {
-            let url = '/api/manufacturers';
+<script setup>
+import {ref, onMounted} from "vue"
+import Form from "form-backend-validation"
 
-            axios.get(url)
-                .then(response => this.manufacturers = response.data.data)
-                .catch(error => console.log(error));
-        },
-        async updateComponent(component) {
-            if (this.isLoading) return;
+const props = defineProps({
+    component: {
+        type: Object,
+        required: true
+    }
+})
 
-            this.isLoading = true
-            this.validationErrors = {}
+const manufacturers = ref([])
 
-            const serializedComponent = new FormData()
-            for (const key in component) {
-                if (component.hasOwnProperty(key)) {
-                    serializedComponent.append(key, component[key])
-                }
-            }
+const form = new Form({
+    'name': props.component.name,
+    'type': props.component.type,
+    'price': props.component.price,
+    'stock': props.component.stock,
+    'manufacturer_id': props.component.manufacturer_id,
+    'file': null,
+    '_method': 'PUT'
+})
 
-            serializedComponent.append("_method", "PUT");
-
-            axios.post('/api/components/' + component.id, serializedComponent)
-                .then(response => {
-                    window.location.href = route('components.index');
-                })
-                .catch(error => {
-                    if (error.response?.data) {
-                        this.validationErrors = error.response.data.errors;
-                        this.isLoading = false;
-                    }
-                });
-        },
-    },
+const fetchManufacturers = async () => {
+    try {
+        const response = await axios.get(route('api.manufacturers.index'))
+        manufacturers.value = response.data
+    } catch (error) {
+        console.log(error)
+    }
 }
+
+const update = async () => {
+    try {
+        await form.post(route('api.components.update', props.component.id))
+        window.location.href = route('components.index')
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+onMounted(() => {
+    fetchManufacturers()
+})
 </script>

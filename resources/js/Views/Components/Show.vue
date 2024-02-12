@@ -47,16 +47,13 @@
     </div>
 </template>
 
-<script>
-import {formatEuro} from "@/helpers.js";
+<script setup>
+import {formatEuro} from "@/helpers.js"
 
-export default {
-    methods: {formatEuro},
-    props: {
-        component: {
-            type: Object,
-            required: true,
-        }
-    },
-}
+const props = defineProps({
+    component: {
+        type: Object,
+        required: true
+    }
+})
 </script>

@@ -4,10 +4,10 @@
             <div class="w-full mb-4 flex justify-end">
                 <div class="flex justify-center">
                     <label for="search" class="mr-2 text-sm self-center">Search:</label>
-                    <input type="text" name="search" id="search" v-model="searchQuery" @change="fetchComponents"
+                    <input type="text" name="search" id="search" v-model="searchQuery" @change="onSearch"
                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2"/>
                     <a :href="route('components.create')"
-                                 class="px-2 py-2 rounded-lg bg-green-500 hover:bg-green-400 inline-flex" v-if="canCreate">
+                       class="px-2 py-2 rounded-lg bg-green-500 hover:bg-green-400 inline-flex" v-if="canCreate">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                              class="w-6 h-6 text-gray-100">
                             <path fill-rule="evenodd"
@@ -74,7 +74,7 @@
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 text-right">
                         <div class="inline-flex gap-2 justify-self-end">
                             <a :href="route('components.show', component.id)"
-                                         class="px-2 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 inline-flex">
+                               class="px-2 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 inline-flex">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                      class="w-6 h-6 text-gray-100">
                                     <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
@@ -84,7 +84,7 @@
                                 </svg>
                             </a>
                             <a :href="route('components.edit', component.id)"
-                                         class="px-2 py-2 rounded-lg bg-blue-500 hover:bg-blue-400 inline-flex" v-if="canEdit">
+                               class="px-2 py-2 rounded-lg bg-blue-500 hover:bg-blue-400 inline-flex" v-if="canEdit">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                      class="w-6 h-6 text-gray-100">
                                     <path
@@ -104,52 +104,44 @@
     </div>
 </template>
 
-<script>
-import {TailwindPagination} from 'laravel-vue-pagination';
-import {formatEuro} from "@/helpers.js";
+<script setup>
+import {formatEuro} from "@/helpers.js"
+import {ref, computed, onMounted} from "vue"
+import {TailwindPagination} from 'laravel-vue-pagination'
 
-export default {
-    data() {
-        return {
-            components: [],
-            searchQuery: '',
-            page: 1,
-        }
-    },
-    mounted() {
-        this.fetchComponents()
-    },
-    computed: {
-        canEdit() {
-            return User?.is_admin === true
-        },
-        canCreate() {
-            return User?.is_admin === true
-        }
-    },
-    methods: {
-        formatEuro,
-        onPageChange(page) {
-            this.page = page
-            this.fetchComponents()
-        },
-        async fetchComponents(page = 1) {
-            try {
-                const response = await axios.get(route('api.components.index'), {
-                    params: {
-                        page: this.page,
-                        search: this.searchQuery
-                    }
-                })
+const page = ref(1)
+const components = ref([])
+const searchQuery = ref(null)
 
-                this.components = response.data;
-            } catch(error) {
-                console.log(error)
+const fetchComponents = async () => {
+    try {
+        const response = await axios.get(route('api.components.index'), {
+            params: {
+                page: page.value,
+                search: searchQuery.value
             }
-        },
-    },
-    components: {
-        TailwindPagination,
+        })
+
+        components.value = response.data
+    } catch (error) {
+        console.log(error)
     }
+}
+
+const canEdit = computed(() => User?.is_admin === true)
+const canCreate = computed(() => User?.is_admin === true)
+
+onMounted(() => {
+    fetchComponents()
+})
+
+const onPageChange = (newPage) => {
+    page.value = newPage
+    fetchComponents()
+}
+
+const onSearch = () => {
+    page.value = 1
+    fetchComponents()
 }
 </script>

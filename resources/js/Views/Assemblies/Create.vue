@@ -59,30 +59,22 @@
     </form>
 </template>
 
-<script>
-import Form from "form-backend-validation";
+<script setup>
+import Form from "form-backend-validation"
 
-export default {
-    data() {
-        return {
-            form: new Form({
-                'name': '',
-                'price': 0.00,
-                'stock': 0,
-                'file': '',
-            }),
-        }
-    },
-    methods: {
-        async store() {
-            try {
-                await this.form.post('/api/assemblies')
+const form = new Form({
+    'name': '',
+    'price': 0.00,
+    'stock': 0,
+    'file': null,
+})
 
-                window.location.href = route('assemblies.index')
-            } catch (error) {
-                console.log(error)
-            }
-        },
-    },
+const store = async () => {
+    try {
+        await form.post(route('api.assemblies.store'))
+        window.location.href = route('assemblies.index')
+    } catch (error) {
+        console.log(error);
+    }
 }
 </script>
