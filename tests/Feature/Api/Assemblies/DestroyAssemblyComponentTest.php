@@ -15,10 +15,8 @@ class DestroyAssemblyComponentTest extends TestCase
         $assembly = Assembly::factory()->create();
         $component = Component::factory()->create();
 
-        $this->actingAs(User::factory()->create([
-            'is_admin' => true,
-        ]))
-            ->delete("/api/assemblies/{$assembly->id}/components/{$component->id}")
+        $this->actingAs(User::factory()->admin()->create())
+            ->deleteJson("/api/assemblies/{$assembly->id}/components/{$component->id}")
             ->assertStatus(Response::HTTP_OK)
             ->assertJson([
                 'message' => 'Component successfully removed',

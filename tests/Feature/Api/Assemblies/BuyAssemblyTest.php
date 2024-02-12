@@ -9,7 +9,8 @@ use Tests\TestCase;
 
 class BuyAssemblyTest extends TestCase
 {
-    public function test_user_can_buy_assembly(): void
+    /** @test */
+    public function user_can_buy_assembly(): void
     {
         $user = User::factory()->create();
 
@@ -26,7 +27,7 @@ class BuyAssemblyTest extends TestCase
                 'message' => 'Assemblies purchased successfully',
             ]);
 
-        $this->assertDatabaseHas('user_assemblies', [
+            $this->assertDatabaseHas(User::class, [
                 'user_id' => $user->id,
                 'assembly_id' => $assembly->id,
                 'quantity' => 3,

@@ -59,6 +59,10 @@
                         @pagination-change-page="onPageChange" class="mt-4"/>
 </template>
 
+<script setup>
+const userAssemblies = ref([])
+</script>
+
 <script>
 import {TailwindPagination} from 'laravel-vue-pagination';
 import {formatEuro, formatDate } from "@/helpers.js";

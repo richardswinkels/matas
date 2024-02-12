@@ -19,6 +19,7 @@ class ViewAssemblyShowPageTest extends TestCase
 
         $this->get("/assemblies/{$assembly->id}")
             ->assertStatus(Response::HTTP_OK)
-            ->assertViewIs('assemblies.show');
+            ->assertViewIs('assemblies.show')
+            ->assertViewHas(['assembly' => $assembly]);
     }
 }

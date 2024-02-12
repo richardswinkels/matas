@@ -1,13 +1,13 @@
 <template>
-    <form @submit.prevent="updateAssembly(assemblyData)">
+    <form @submit.prevent="updateAssembly">
         <div>
             <label for="name" class="block text-sm font-semibold mb-1">
                 Name:
             </label>
-            <input v-model="assemblyData.name" id="name" type="text"
+            <input v-model="assemblyForm.name" id="name" type="text"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in validationErrors?.name">
+                <div v-for="message in assemblyForm.errors.get('name')">
                     {{ message }}
                 </div>
             </div>
@@ -16,10 +16,10 @@
             <label for="price" class="block text-sm font-semibold mb-1">
                 Price:
             </label>
-            <input v-model="assemblyData.price" id="price" type="number" min="0" step="0.01"
+            <input v-model="assemblyForm.price" id="price" type="number" min="0" step="0.01"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in validationErrors?.price">
+                <div v-for="message in assemblyForm.errors.get('price')">
                     {{ message }}
                 </div>
             </div>
@@ -28,10 +28,10 @@
             <label for="stock" class="block text-sm font-semibold mb-1">
                 stock:
             </label>
-            <input v-model="assemblyData.stock" id="stock" type="number" min="0"
+            <input v-model="assemblyForm.stock" id="stock" type="number" min="0"
                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in validationErrors?.stock">
+                <div v-for="message in assemblyForm.errors.get('stock')">
                     {{ message }}
                 </div>
             </div>
@@ -40,9 +40,9 @@
             <label for="image" class="block text-sm font-semibold mb-1">
                 Image:
             </label>
-            <input @change="assemblyData.file = $event.target.files[0]" type="file" id="image"/>
+            <input @change="assemblyForm.file = $event.target.files[0]" type="file" id="image"/>
             <div class="text-red-600 text-sm mt-1">
-                <div v-for="message in validationErrors?.file">
+                <div v-for="message in assemblyForm.errors.get('file')">
                     {{ message }}
                 </div>
             </div>
@@ -50,9 +50,9 @@
         <div class="mt-4">
             <button type="submit"
                     class="px-3 py-2 rounded-lg bg-indigo-500 hover:bg-indigo-400 text-white font-semibold text-sm inline-flex">
-                <span v-show="isLoading"
+                <span v-show="assemblyForm.processing"
                       class="inline-block animate-spin w-4 h-4 mr-2 border-t-2 border-t-white border-r-2 border-r-white border-b-2 border-b-white border-l-2 border-l-blue-600 rounded-full"></span>
-                <span v-if="isLoading">Processing...</span>
+                <span v-if="assemblyForm.processing">Processing...</span>
                 <span v-else>Save</span>
             </button>
         </div>
@@ -62,7 +62,7 @@
             Components in Assembly:
         </label>
         <ul class="mt-2">
-            <li v-for="component in assemblyData.components">
+            <li v-for="component in assemblyComponents.data">
                 <div>
                     <a :href="route('components.show', component.id)"
                        class="underline hover:text-gray-500 mr-2">
@@ -81,7 +81,7 @@
             <select v-model="selectedComponentId" id="manufacturer"
                     class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mr-2 w-full">
                 <option value="" selected>Choose component</option>
-                <option v-for="component in components" :value="component.id">
+                <option v-for="component in components.data" :value="component.id">
                     #{{ component.id }} - {{ component.name }}
                 </option>
             </select>
@@ -98,83 +98,80 @@
     </form>
 </template>
 
-<script>
-export default {
-    props: {
-        assembly: {
-            type: Object,
-            required: true,
-        }
-    },
-    data() {
-        return {
-            assemblyData: {
-                ...this.assembly
-            },
-            components: [],
-            selectedComponentId: {},
-            validationErrors: [],
-            isLoading: false,
-        }
-    },
-    mounted() {
-      this.fetchComponents();
-    },
-    methods: {
-        async fetchAssemblyComponents() {
-            // let url = '/api/assemblies/' + this.assembly.id + '/components';
+<script setup>
+import {onMounted, ref, watch} from "vue"
+import Form from "form-backend-validation"
 
-            axios.get(`/api/assemblies/${this.assembly.id}/components`)
-                .then(response => this.assemblyData['components'] = response.data.data)
-                .catch(error => console.log(error));
-        },
-        async fetchComponents() {
-            let url = '/api/components';
+const props = defineProps({
+    assembly: {
+        type: Object,
+        required: true
+    }
+})
 
-            axios.get(url)
-                .then(response => this.components = response.data.data)
-                .catch(error => console.log(error));
-        },
-        async updateAssembly(assembly) {
-            if (this.isLoading) return;
+const components = ref([])
+const assemblyComponents = ref([])
+const selectedComponentId = ref()
+const validationErrors = ref([])
 
-            this.isLoading = true;
-            this.validationErrors = {};
+const assemblyForm = new Form({
+    'name': props.assembly.name,
+    'price': props.assembly.price,
+    'stock': props.assembly.stock,
+    'manufacturer_id': props.assembly.manufacturer_id,
+    'file': null,
+    '_method': 'PUT'
+})
 
-            const serializedAssembly = new FormData()
-            for (const key in assembly) {
-                if (assembly.hasOwnProperty(key)) {
-                    serializedAssembly.append(key, assembly[key])
-                }
-            }
-
-            serializedAssembly.append("_method", "PUT");
-
-            axios.post('/api/assemblies/' + assembly.id, serializedAssembly)
-                .then(response => {
-                    window.location.href = route('assemblies.index');
-                })
-                .catch(error => {
-                    if (error.response?.data) {
-                        this.validationErrors = error.response.data.errors;
-                        this.isLoading = false;
-                    }
-                });
-        },
-        async addComponent(componentId) {
-            let url = `/api/assemblies/${this.assembly.id}/components/${componentId}`;
-
-            axios.post(url)
-                .then(() => this.fetchAssemblyComponents())
-                .catch(error => console.log(error));
-        },
-        async removeComponent(componentId) {
-            let url = `/api/assemblies/${this.assembly.id}/components/${componentId}`;
-
-            axios.delete(url)
-                .then(() => this.fetchAssemblyComponents())
-                .catch(error => console.log(error));
-        }
-    },
+const updateAssembly = async () => {
+    try {
+        await assemblyForm.post(route('api.assembly.update', props.assembly.id))
+        window.location.href = route('assemblies.index');
+    } catch (error) {
+        console.log(error)
+    }
 }
+
+const fetchComponents = async () => {
+    try {
+        const response = await axios.get(route('api.components.index'))
+        components.value = response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const fetchAssemblyComponents = async () => {
+    try {
+        const response = await axios.get(route('api.assembly.components.show', props.assembly.id))
+        assemblyComponents.value = response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const addComponent = async () => {
+    try {
+        await axios.post(route('assemblies.components.store', props.assembly.id, selectedComponentId))
+        await fetchAssemblyComponents()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const removeComponent = async (componentId) => {
+    try {
+        await axios.delete(route('assemblies.components.destroy', props.assembly.id, componentId))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+onMounted(() => {
+    fetchComponents()
+})
+
+watch(() => props.assembly.components, (initialComponents) => {
+    assemblyComponents.value = { ...initialComponents };
+});
 </script>

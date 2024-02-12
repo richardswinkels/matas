@@ -44,13 +44,14 @@ class GetAssembliesTest extends TestCase
     public function test_anyone_can_search_and_get_assemblies(): void
     {
         Assembly::factory()->create(['name' => 'TestAssembly']);
-        Assembly::factory()->createMany(10);
+        Assembly::factory()->times(10)->create();//Many(10);
 
         $this->getJson('/api/assemblies?search=TestAssembly')
             ->assertJsonCount(1, 'data')
-            ->assertJsonFragment([
-                'name' => 'TestAssembly'
-            ])
+            ->assertJsonPath('data.0.name', 'TestAssembly')
+//            ->assertJsonFragment([
+//                'name' => 'TestAssembly'
+//            ])
             ->assertStatus(Response::HTTP_OK);
     }
 }

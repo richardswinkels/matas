@@ -14,6 +14,7 @@ class ImageServiceTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+
         $this->imageService = new ImageService();
     }
 
@@ -22,15 +23,13 @@ class ImageServiceTest extends TestCase
         Storage::fake('public');
 
         $image = UploadedFile::fake()->image('image.jpg');
-        $width = 400;
-        $height = 400;
-        $imagePath = $this->imageService->storeImage($image, $width, $height);
+        $imagePath = $this->imageService->storeImage($image, 400, 400);
 
         Storage::disk('public')->assertExists($imagePath);
 
         [$storedWidth, $storedHeight] = getimagesizefromstring(Storage::disk('public')->get($imagePath));
-        $this->assertEquals($width, $storedWidth);
-        $this->assertEquals($height, $storedHeight);
+        $this->assertEquals(400, $storedWidth);
+        $this->assertEquals(400, $storedHeight);
     }
 
     public function test_it_stores_a_thumbnail_with_specified_dimensions(): void

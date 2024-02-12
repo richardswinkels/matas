@@ -13,16 +13,22 @@ class StoreAssemblyTest extends TestCase
 {
     public function test_admin_can_store_assembly(): void
     {
-        $assemblyData = Assembly::factory()->make()->toArray();
-
         $this->actingAs(User::factory()->create([
             'is_admin' => true,
         ]))
-            ->postJson('/api/assemblies', $assemblyData)
+            ->postJson('/api/assemblies', [
+                'name' => 'SomeName',
+                'price' => 100,
+                'stock' => 1000,
+            ])
             ->assertStatus(Response::HTTP_CREATED)
             ->assertJson(['message' => 'Assembly created successfully']);
 
-        $this->assertDatabaseHas('assemblies', $assemblyData);
+        $this->assertDatabaseHas(Assembly::class, [
+            'name' => 'SomeName',
+            'price' => 100,
+            'stock' => 1000,
+        ]);
     }
 
     /**
