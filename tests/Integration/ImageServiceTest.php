@@ -1,12 +1,11 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Integration;
 
 use App\Services\ImageService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Nette\Utils\Image;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class ImageServiceTest extends TestCase
 {
@@ -29,7 +28,7 @@ class ImageServiceTest extends TestCase
 
         Storage::disk('public')->assertExists($imagePath);
 
-        [$storedWidth, $storedHeight] = getimagesize(Storage::disk('public')->get($imagePath));
+        [$storedWidth, $storedHeight] = getimagesizefromstring(Storage::disk('public')->get($imagePath));
         $this->assertEquals($width, $storedWidth);
         $this->assertEquals($height, $storedHeight);
     }
@@ -45,7 +44,7 @@ class ImageServiceTest extends TestCase
 
         Storage::disk('public')->assertExists($thumbnailPath);
 
-        [$storedWidth, $storedHeight] = getimagesize(Storage::disk('public')->get($thumbnailPath));
+        [$storedWidth, $storedHeight] = getimagesizefromstring(Storage::disk('public')->get($thumbnailPath));
         $this->assertEquals($width, $storedWidth);
         $this->assertEquals($height, $storedHeight);
     }
