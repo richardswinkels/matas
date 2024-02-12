@@ -19,21 +19,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('components', ComponentController::class)->only('index'); // done
-Route::apiResource('assemblies', AssemblyController::class)->only('index'); // done
+Route::apiResource('components', ComponentController::class)->only('index');
+Route::apiResource('assemblies', AssemblyController::class)->only('index');
 
 Route::group(['middleware' => ['auth']], function (){
-    Route::get('user/assemblies', [UserAssemblyController::class, 'index'])->name('user.assemblies.index'); // done
-    Route::post('user/assemblies/{assembly}', BuyAssemblyController::class)->name('user.assemblies.store'); // done
+    Route::get('user/assemblies', [UserAssemblyController::class, 'index'])->name('user.assemblies.index');
+    Route::post('user/assemblies/{assembly}', BuyAssemblyController::class)->name('user.assemblies.store');
 });
 
 Route::group(['middleware' => ['auth.admin']], function () {
-    Route::get('manufacturers', [ManufacturerController::class, 'index'])->name('manufacturers.index'); // done
+    Route::get('manufacturers', [ManufacturerController::class, 'index'])->name('manufacturers.index');
 
     Route::apiResource('components', ComponentController::class)->only('store', 'update');
     Route::apiResource('assemblies', AssemblyController::class)->only('store', 'update');
 
-    Route::post('assemblies/{assembly}/components/{component}', [AssemblyComponentController::class, 'store'])->name('assembly.components.store'); // done
-    Route::get('assemblies/{assembly}/components', [AssemblyComponentController::class, 'show'])->name('assembly.components.show'); // done
-    Route::delete('assemblies/{assembly}/components/{component}', [AssemblyComponentController::class, 'destroy'])->name('assembly.components.destroy'); // done
+    Route::post('assemblies/{assembly}/components/{component}', [AssemblyComponentController::class, 'store'])->name('assemblies.components.store');
+    Route::get('assemblies/{assembly}/components', [AssemblyComponentController::class, 'show'])->name('assemblies.components.show');
+    Route::delete('assemblies/{assembly}/components/{component}', [AssemblyComponentController::class, 'destroy'])->name('assemblies.components.destroy');
 });
